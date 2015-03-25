@@ -1,5 +1,7 @@
 # WOPR - Raspberry Pi hubot
 
+ * Master: [![Build Status](https://travis-ci.org/wdalmut/wopr-hubot.svg?branch=master)](https://travis-ci.org/wdalmut/wopr-hubot)
+
 a set of useful things that i need in order to use Raspberry Pi with the camera
 during any event.
 
