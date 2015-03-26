@@ -235,6 +235,10 @@ describe "tic tac toe robot integration", ->
           name: "third"
           room: "#test"
         }
+        @robot.brain.userForId "4", {
+          name: "fourth"
+          room: "#test"
+        }
 
         ttt = new TicTacToe
         ttt.setStatus 0, 0, Status.CROSS
@@ -251,6 +255,17 @@ describe "tic tac toe robot integration", ->
         ttt.setStatus 2, 1, Status.NOUGHT
         ttt.setStatus 2, 2, Status.NOUGHT
         @robot.brain.set "third_playground", ttt.map
+        ttt = new TicTacToe
+        ttt.setStatus 0, 0, Status.EMPTY
+        ttt.setStatus 0, 1, Status.NOUGHT
+        ttt.setStatus 0, 2, Status.NOUGHT
+        ttt.setStatus 1, 0, Status.CROSS
+        ttt.setStatus 1, 1, Status.CROSS
+        ttt.setStatus 1, 2, Status.EMPTY
+        ttt.setStatus 2, 0, Status.EMPTY
+        ttt.setStatus 2, 1, Status.EMPTY
+        ttt.setStatus 2, 2, Status.EMPTY
+        @robot.brain.set "fourth_playground", ttt.map
         @robot.brain.save()
 
         done()
@@ -259,6 +274,22 @@ describe "tic tac toe robot integration", ->
 
     afterEach ->
       @robot.shutdown()
+
+    xit "should try to win first", (done) ->
+      @robot.adapter.on "send", (env, str) ->
+        expect(str[0]).toEqual """
+
+        ●|●|●
+        -----
+        ◌|✘|✘
+        -----
+        ◌|◌|✘
+
+        """
+        done()
+
+      user = @robot.brain.data.users["4"]
+      @robot.adapter.receive(new TextMessage user, "@wopr tick 3 3")
 
     it "should reply that a user won", (done) ->
       @robot.adapter.on "send", (env, str) ->
@@ -292,7 +323,7 @@ describe "tic tac toe robot integration", ->
       user = @robot.brain.data.users["2"]
       @robot.adapter.receive(new TextMessage user, "@wopr tick 2 2")
 
-    xit "should reply that we drew", (done) ->
+    it "should reply that we drew", (done) ->
       @robot.adapter.on "send", (env, str) ->
         expect(str[0]).toEqual """
         You win!!!
