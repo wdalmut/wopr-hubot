@@ -34,21 +34,24 @@ module.exports = (robot) ->
     playground = robot.brain.get "#{user}_playground"
     ttt.map = playground
 
-    ttt.setStatus row-1, col-1, Status.CROSS
-    ttt.replyTo row-1, col-1
+    try
+      ttt.setStatus row-1, col-1, Status.CROSS
+      ttt.replyTo row-1, col-1
 
-    robot.brain.set "#{user}_playground", ttt.map
+      robot.brain.set "#{user}_playground", ttt.map
 
-    line = ""
-    if ttt.isWon Status.CROSS
-      line = "You win!!!"
-      robot.brain.remove "#{user}_playground"
-    else if ttt.isWon Status.NOUGHT
-      line =" You lost!!!"
-      robot.brain.remove "#{user}_playground"
-    else if ttt.isDrew()
-      line = "A strange game, the only winning move is not to play"
-      robot.brain.remove "#{user}_playground"
+      line = ""
+      if ttt.hasWon Status.CROSS
+        line = "You win!!!"
+        robot.brain.remove "#{user}_playground"
+      else if ttt.hasWon Status.NOUGHT
+        line ="You lost!!!"
+        robot.brain.remove "#{user}_playground"
+      else if ttt.weDrew()
+        line = "A strange game, the only winning move is not to play"
+        robot.brain.remove "#{user}_playground"
 
-    msg.send line + ttt.draw()
+      msg.send line + ttt.draw()
+    catch error
+      msg.send "Hey -> #{error.message}"
 

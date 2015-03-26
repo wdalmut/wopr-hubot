@@ -18,19 +18,48 @@ exports.TicTacToe = class TicTacToe
       @map[x][y] = status
 
   replyTo: (x, y) ->
-    [i, j] = @getBestBlockMove x, y
+    [i, j] = @getMove x, y
     @setStatus i, j, Status.NOUGHT
 
-  getBestBlockMove: (x, y) ->
-    r = 0; c = 0
-    for i in [1, 2, 3]
-      for j in [1, 2, 3]
-        if i is 3 and j is 3 then continue
-        if @map[(x+i)%3][(y+j)%3] == Status.CROSS
-          if x != (x+i)%3 then r = (x+i+1)%3
-          if y != (y+j)%3 then c = (y+j+1)%3
-          if @map[r][c] == Status.EMPTY then return [r, c]
+  getMove: (x, y) ->
+    if ret = @getBestMove x, y, Status.CROSS, Status.NOUGHT
+      return ret
+    else
+      if ret = @getBestMove x, y, Status.NOUGHT, Status.CROSS
+        return ret
+
     @getFirstEmptyCell x, y
+
+  getBestMove: (x, y, check, apply) ->
+    for i in [0, 1, 2]
+      for j in [0, 1, 2]
+        if @map[i][j] == check
+          break
+        else
+          if @map[i][j] == Status.EMPTY
+            if @map[i][(j+1)%3] == apply and @map[i][(j+2)%3] == apply then return [i, j]
+
+    for j in [0, 1, 2]
+      for i in [0, 1, 2]
+        if @map[i][j] == check
+          break
+        else
+          if @map[i][j] == Status.EMPTY
+            if @map[(i+1)%3][j] == apply and @map[(i+2)%3][j] == apply then return [i, j]
+
+    for i in [0, 1, 2]
+      if @map[i][i] == check
+        break
+      else
+        if @map[i][i] == Status.EMPTY
+          if @map[(i+1)%3][(i+1)%3] == apply and @map[(i+2)%3][(i+2)%3] == apply then return [i, i]
+
+    for [i, j] in [[2, 0], [1, 1], [0, 2]]
+      if @map[i][j] == check
+        break
+      else
+        if @map[i][i] == Status.EMPTY
+          if @map[(i+1)%3][(j+1)%3] == apply and @map[(i+2)%3][(j+2)%3] == apply then return [i, j]
 
   getFirstEmptyCell: (x, y) ->
     for i in [1, 2, 3]
@@ -39,7 +68,7 @@ exports.TicTacToe = class TicTacToe
         if @map[(x+i)%3][(y+j)%3] == Status.EMPTY
           return [(x+i)%3, (y+j)%3]
 
-  isWon: (symbol) ->
+  hasWon: (symbol) ->
     lineWon = (line) =>
       for j in [0, 1, 2]
         if @map[line][j] != symbol
@@ -80,8 +109,8 @@ exports.TicTacToe = class TicTacToe
         if @map[i][j] == Status.EMPTY then return false
     return true
 
-  isDrew: () ->
-    if @noMoreMoves() and not @isWon Status.CROSS and not @isWon Status.NOUGHT then true else false
+  weDrew: () ->
+    if @noMoreMoves() and not @hasWon Status.CROSS and not @hasWon Status.NOUGHT then true else false
 
   draw: () ->
     playground = ["\n"]

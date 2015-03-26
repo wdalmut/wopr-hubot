@@ -95,7 +95,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 1, 1, Status.CROSS
       ttt.setStatus 1, 2, Status.CROSS
 
-      expect(ttt.isWon(Status.CROSS)).toBe true
+      expect(ttt.hasWon(Status.CROSS)).toBe true
 
     it "should understand that there is a winning game by crosses by column", ->
       ttt = new TicTacToe
@@ -103,7 +103,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 1, 1, Status.CROSS
       ttt.setStatus 2, 1, Status.CROSS
 
-      expect(ttt.isWon(Status.CROSS)).toBe true
+      expect(ttt.hasWon(Status.CROSS)).toBe true
 
     it "should understand that there is a winning game by crosses", ->
       ttt = new TicTacToe
@@ -114,7 +114,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 0, 2, Status.NOUGHT
       ttt.setStatus 1, 2, Status.NOUGHT
 
-      expect(ttt.isWon(Status.CROSS)).toBe true
+      expect(ttt.hasWon(Status.CROSS)).toBe true
 
     it "should understand that there is a winning game by crosses [rev]", ->
       ttt = new TicTacToe
@@ -124,7 +124,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 0, 1, Status.NOUGHT
       ttt.setStatus 1, 2, Status.NOUGHT
 
-      expect(ttt.isWon(Status.CROSS)).toBe true
+      expect(ttt.hasWon(Status.CROSS)).toBe true
 
     it "should understand that noughts lost", ->
       ttt = new TicTacToe
@@ -134,7 +134,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 0, 1, Status.NOUGHT
       ttt.setStatus 1, 2, Status.NOUGHT
 
-      expect(ttt.isWon(Status.NOUGHT)).toBe false
+      expect(ttt.hasWon(Status.NOUGHT)).toBe false
 
     it "should understand that we drew", ->
       ttt = new TicTacToe
@@ -148,14 +148,14 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 2, 1, Status.NOUGHT
       ttt.setStatus 2, 2, Status.CROSS
 
-      expect(ttt.isDrew()).toBe true
+      expect(ttt.weDrew()).toBe true
 
     it "should understand that we are actually playing", ->
       ttt = new TicTacToe
       ttt.setStatus 0, 0, Status.NOUGHT
       ttt.setStatus 0, 1, Status.CROSS
 
-      expect(ttt.isDrew()).toBe false
+      expect(ttt.weDrew()).toBe false
       expect(ttt.noMoreMoves()).toBe false
 
 
@@ -239,6 +239,18 @@ describe "tic tac toe robot integration", ->
           name: "fourth"
           room: "#test"
         }
+        @robot.brain.userForId "5", {
+          name: "fifth"
+          room: "#test"
+        }
+        @robot.brain.userForId "6", {
+          name: "sixth"
+          room: "#test"
+        }
+        @robot.brain.userForId "7", {
+          name: "seventh"
+          room: "#test"
+        }
 
         ttt = new TicTacToe
         ttt.setStatus 0, 0, Status.CROSS
@@ -266,6 +278,39 @@ describe "tic tac toe robot integration", ->
         ttt.setStatus 2, 1, Status.EMPTY
         ttt.setStatus 2, 2, Status.EMPTY
         @robot.brain.set "fourth_playground", ttt.map
+        ttt = new TicTacToe
+        ttt.setStatus 0, 0, Status.EMPTY
+        ttt.setStatus 0, 1, Status.NOUGHT
+        ttt.setStatus 0, 2, Status.EMPTY
+        ttt.setStatus 1, 0, Status.CROSS
+        ttt.setStatus 1, 1, Status.EMPTY
+        ttt.setStatus 1, 2, Status.CROSS
+        ttt.setStatus 2, 0, Status.EMPTY
+        ttt.setStatus 2, 1, Status.NOUGHT
+        ttt.setStatus 2, 2, Status.EMPTY
+        @robot.brain.set "fifth_playground", ttt.map
+        ttt = new TicTacToe
+        ttt.setStatus 0, 0, Status.NOUGHT
+        ttt.setStatus 0, 1, Status.EMPTY
+        ttt.setStatus 0, 2, Status.CROSS
+        ttt.setStatus 1, 0, Status.EMPTY
+        ttt.setStatus 1, 1, Status.EMPTY
+        ttt.setStatus 1, 2, Status.CROSS
+        ttt.setStatus 2, 0, Status.EMPTY
+        ttt.setStatus 2, 1, Status.EMPTY
+        ttt.setStatus 2, 2, Status.NOUGHT
+        @robot.brain.set "sixth_playground", ttt.map
+        ttt = new TicTacToe
+        ttt.setStatus 0, 0, Status.CROSS
+        ttt.setStatus 0, 1, Status.EMPTY
+        ttt.setStatus 0, 2, Status.NOUGHT
+        ttt.setStatus 1, 0, Status.EMPTY
+        ttt.setStatus 1, 1, Status.EMPTY
+        ttt.setStatus 1, 2, Status.EMPTY
+        ttt.setStatus 2, 0, Status.NOUGHT
+        ttt.setStatus 2, 1, Status.EMPTY
+        ttt.setStatus 2, 2, Status.CROSS
+        @robot.brain.set "seventh_playground", ttt.map
         @robot.brain.save()
 
         done()
@@ -275,13 +320,13 @@ describe "tic tac toe robot integration", ->
     afterEach ->
       @robot.shutdown()
 
-    xit "should try to win first", (done) ->
+    it "should try to win first", (done) ->
       @robot.adapter.on "send", (env, str) ->
         expect(str[0]).toEqual """
-
+        You lost!!!
         ●|●|●
         -----
-        ◌|✘|✘
+        ✘|✘|◌
         -----
         ◌|◌|✘
 
@@ -290,6 +335,54 @@ describe "tic tac toe robot integration", ->
 
       user = @robot.brain.data.users["4"]
       @robot.adapter.receive(new TextMessage user, "@wopr tick 3 3")
+
+    it "should try to win also on cols", (done) ->
+      @robot.adapter.on "send", (env, str) ->
+        expect(str[0]).toEqual """
+        You lost!!!
+        ◌|●|◌
+        -----
+        ✘|●|✘
+        -----
+        ◌|●|✘
+
+        """
+        done()
+
+      user = @robot.brain.data.users["5"]
+      @robot.adapter.receive(new TextMessage user, "@wopr tick 3 3")
+
+    it "should try to win also on diag", (done) ->
+      @robot.adapter.on "send", (env, str) ->
+        expect(str[0]).toEqual """
+        You lost!!!
+        ●|◌|✘
+        -----
+        ◌|●|✘
+        -----
+        ✘|◌|●
+
+        """
+        done()
+
+      user = @robot.brain.data.users["6"]
+      @robot.adapter.receive(new TextMessage user, "@wopr tick 3 1")
+
+    it "should try to win also on a rev diag", (done) ->
+      @robot.adapter.on "send", (env, str) ->
+        expect(str[0]).toEqual """
+        You lost!!!
+        ✘|◌|●
+        -----
+        ◌|●|◌
+        -----
+        ●|✘|✘
+
+        """
+        done()
+
+      user = @robot.brain.data.users["7"]
+      @robot.adapter.receive(new TextMessage user, "@wopr tick 3 2")
 
     it "should reply that a user won", (done) ->
       @robot.adapter.on "send", (env, str) ->
