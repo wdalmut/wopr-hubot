@@ -7,7 +7,7 @@ Status = require('../scripts/ttt/impl').Status
 module.exports = (robot) ->
   robot.respond /(play)?[ ]?(tic tac toe|ttt)/i, (msg) ->
 
-    user = msg.message.user.name
+    user = msg.message.user.user
     line = "Hey #{user} we are playing now on:"
 
     ttt = new TicTacToe
@@ -28,7 +28,7 @@ module.exports = (robot) ->
   robot.respond /(sign|tick|mark|put) ([1-3]{1}) ([1-3]{1})/i, (msg) ->
     [all, command, row, col] = msg.match
 
-    user = msg.message.user.name
+    user = msg.message.user.user
 
     ttt = new TicTacToe
     playground = robot.brain.get "#{user}_playground"

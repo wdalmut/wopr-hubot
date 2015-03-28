@@ -165,11 +165,11 @@ describe "tic tac toe robot integration", ->
       @robot.adapter.on "connected", ->
         require("../scripts/ttt")(@robot)
         @robot.brain.userForId "1", {
-          name: "test"
+          user: "test"
           room: "#test"
         }
         @robot.brain.userForId "2", {
-          name: "player"
+          user: "player"
           room: "#test"
         }
 
@@ -224,31 +224,31 @@ describe "tic tac toe robot integration", ->
       @robot.adapter.on "connected", ->
         require("../scripts/ttt")(@robot)
         @robot.brain.userForId "1", {
-          name: "test"
+          user: "test"
           room: "#test"
         }
         @robot.brain.userForId "2", {
-          name: "player"
+          user: "player"
           room: "#test"
         }
         @robot.brain.userForId "3", {
-          name: "third"
+          user: "third"
           room: "#test"
         }
         @robot.brain.userForId "4", {
-          name: "fourth"
+          user: "fourth"
           room: "#test"
         }
         @robot.brain.userForId "5", {
-          name: "fifth"
+          user: "fifth"
           room: "#test"
         }
         @robot.brain.userForId "6", {
-          name: "sixth"
+          user: "sixth"
           room: "#test"
         }
         @robot.brain.userForId "7", {
-          name: "seventh"
+          user: "seventh"
           room: "#test"
         }
 
