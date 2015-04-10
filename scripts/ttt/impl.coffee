@@ -5,6 +5,7 @@ AttackStrategy = require('./attack_strategy').AttackStrategy
 FirstEmptyStrategy = require('./first_empty_strategy').FirstEmptyStrategy
 PlayTheCenterStrategy = require('./play_the_center').PlayTheCenterStrategy
 OppositeCornerStrategy = require('./opposite_corner').OppositeCornerStrategy
+EmptyCornerStrategy = require('./empty_corner').EmptyCornerStrategy
 
 exports.TicTacToe = class TicTacToe
   constructor: () ->
@@ -18,6 +19,7 @@ exports.TicTacToe = class TicTacToe
       new AttackStrategy(),
       new PlayTheCenterStrategy(),
       new OppositeCornerStrategy(),
+      new EmptyCornerStrategy(),
       new FirstEmptyStrategy(),
     ]
 

@@ -7,9 +7,9 @@ describe "Play the opposite corner", ->
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
-    ];
+    ]
 
-    strategy = new OppositeCornerStrategy();
+    strategy = new OppositeCornerStrategy()
     map[0][0] = Status.CROSS
 
     expect(strategy.getMove map, 0, 0).toEqual [2, 2]
