@@ -25,7 +25,7 @@ module.exports = (grunt) ->
     coffee:
       compile:
         files:
-          'spec/robot_spec.js': ['spec/*.coffee']
+          'spec/robot_spec.js': ['spec/**/*.coffee']
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-jasmine-nodejs'

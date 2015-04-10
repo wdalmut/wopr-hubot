@@ -32,7 +32,7 @@ describe "tic tac toe robot integration", ->
       ttt.setStatus 0, 0, Status.CROSS
 
       ttt.replyTo 0, 0
-      expect(ttt.map[1][1]).toBe Status.NOUGHT
+      expect(ttt.map[2][2]).toBe Status.NOUGHT
 
     it "should block a user attack on a diagonal", ->
       ttt = new TicTacToe

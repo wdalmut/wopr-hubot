@@ -4,6 +4,7 @@ BlockStrategy = require('./block_strategy').BlockStrategy
 AttackStrategy = require('./attack_strategy').AttackStrategy
 FirstEmptyStrategy = require('./first_empty_strategy').FirstEmptyStrategy
 PlayTheCenterStrategy = require('./play_the_center').PlayTheCenterStrategy
+OppositeCornerStrategy = require('./opposite_corner').OppositeCornerStrategy
 
 exports.TicTacToe = class TicTacToe
   constructor: () ->
@@ -15,8 +16,9 @@ exports.TicTacToe = class TicTacToe
     @fallbackStrategies = [
       new BlockStrategy(),
       new AttackStrategy(),
-      new FirstEmptyStrategy(),
       new PlayTheCenterStrategy(),
+      new OppositeCornerStrategy(),
+      new FirstEmptyStrategy(),
     ]
 
   setStatus: (x, y, status) ->
