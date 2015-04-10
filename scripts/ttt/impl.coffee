@@ -15,8 +15,8 @@ exports.TicTacToe = class TicTacToe
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
     ]
     @fallbackStrategies = [
-      new BlockStrategy(),
       new AttackStrategy(),
+      new BlockStrategy(),
       new PlayTheCenterStrategy(),
       new OppositeCornerStrategy(),
       new EmptyCornerStrategy(),

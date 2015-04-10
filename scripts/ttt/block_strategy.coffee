@@ -3,5 +3,5 @@ BlockAttackStrategy = require('./block_attack_strategy').BlockAttackStrategy
 
 exports.BlockStrategy = class BlockStrategy extends BlockAttackStrategy
   constructor: ->
-    super(Status.CROSS, Status.NOUGHT)
+    super(Status.NOUGHT, Status.CROSS)
 
