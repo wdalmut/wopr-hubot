@@ -2,7 +2,7 @@
 #   Check if raspberry correctly engaged with twitter
 #
 TicTacToe = require('../scripts/ttt/impl').TicTacToe
-Status = require('../scripts/ttt/impl').Status
+Status = require('../scripts/ttt/status').Status
 
 module.exports = (robot) ->
   robot.respond /(play)?[ ]?(tic tac toe|ttt)/i, (msg) ->

@@ -1,7 +1,8 @@
-exports.Status = Status =
-  EMPTY : 0
-  CROSS: 1
-  NOUGHT: 2
+Status = require('./status').Status
+
+BlockStrategy = require('./block_strategy').BlockStrategy
+AttackStrategy = require('./attack_strategy').AttackStrategy
+FirstEmptyStrategy = require('./first_empty_strategy').FirstEmptyStrategy
 
 exports.TicTacToe = class TicTacToe
   constructor: () ->
@@ -9,6 +10,11 @@ exports.TicTacToe = class TicTacToe
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
       [Status.EMPTY, Status.EMPTY, Status.EMPTY],
+    ]
+    @fallbackStrategies = [
+      new BlockStrategy(),
+      new AttackStrategy(),
+      new FirstEmptyStrategy(),
     ]
 
   setStatus: (x, y, status) ->
@@ -22,51 +28,10 @@ exports.TicTacToe = class TicTacToe
     @setStatus i, j, Status.NOUGHT
 
   getMove: (x, y) ->
-    if ret = @getBestMove x, y, Status.CROSS, Status.NOUGHT
-      return ret
-    else
-      if ret = @getBestMove x, y, Status.NOUGHT, Status.CROSS
-        return ret
+    for strategy in @fallbackStrategies
+      if pos = strategy.getMove @map, x, y then return pos
 
-    @getFirstEmptyCell x, y
-
-  getBestMove: (x, y, check, apply) ->
-    for i in [0, 1, 2]
-      for j in [0, 1, 2]
-        if @map[i][j] == check
-          break
-        else
-          if @map[i][j] == Status.EMPTY
-            if @map[i][(j+1)%3] == apply and @map[i][(j+2)%3] == apply then return [i, j]
-
-    for j in [0, 1, 2]
-      for i in [0, 1, 2]
-        if @map[i][j] == check
-          break
-        else
-          if @map[i][j] == Status.EMPTY
-            if @map[(i+1)%3][j] == apply and @map[(i+2)%3][j] == apply then return [i, j]
-
-    for i in [0, 1, 2]
-      if @map[i][i] == check
-        break
-      else
-        if @map[i][i] == Status.EMPTY
-          if @map[(i+1)%3][(i+1)%3] == apply and @map[(i+2)%3][(i+2)%3] == apply then return [i, i]
-
-    for [i, j] in [[2, 0], [1, 1], [0, 2]]
-      if @map[i][j] == check
-        break
-      else
-        if @map[i][i] == Status.EMPTY
-          if @map[(i+1)%3][(j+1)%3] == apply and @map[(i+2)%3][(j+2)%3] == apply then return [i, j]
-
-  getFirstEmptyCell: (x, y) ->
-    for i in [1, 2, 3]
-      for j in [1, 2, 3]
-        if i is 3 and j is 3 then continue
-        if @map[(x+i)%3][(y+j)%3] == Status.EMPTY
-          return [(x+i)%3, (y+j)%3]
+    throw new Error "No one strategy found..."
 
   hasWon: (symbol) ->
     lineWon = (line) =>

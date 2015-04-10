@@ -1,5 +1,5 @@
 TicTacToe = require('../scripts/ttt/impl').TicTacToe
-Status = require('../scripts/ttt/impl').Status
+Status = require('../scripts/ttt/status').Status
 
 Robot       = require("hubot/src/robot")
 TextMessage = require("hubot/src/message").TextMessage
