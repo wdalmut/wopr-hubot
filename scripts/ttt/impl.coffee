@@ -69,8 +69,9 @@ exports.TicTacToe = class TicTacToe
     for i in [0, 1, 2]
       if lineWon(i) then return true
       if columnWon(i) then return true
-      if diagonalWon() then return true
-      if reverseDiagonalWon() then return true
+
+    if diagonalWon() then return true
+    if reverseDiagonalWon() then return true
 
     return false
 

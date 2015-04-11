@@ -25,7 +25,7 @@ module.exports = (robot) ->
 
     msg.send line + ttt.draw()
 
-  robot.respond /(sign|tick|mark|put) ([1-3]{1}) ([1-3]{1})/i, (msg) ->
+  robot.respond /(sign|play|tick|mark|put) ([1-3]{1}) ([1-3]{1})/i, (msg) ->
     [all, command, row, col] = msg.match
 
     user = msg.message.user.user
