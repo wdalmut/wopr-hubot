@@ -3,7 +3,7 @@ os = require 'os'
 Robot       = require("hubot/src/robot")
 TextMessage = require("hubot/src/message").TextMessage
 
-describe "test", ->
+describe "test reply to user pings", ->
   beforeEach (done) ->
     @robot = new Robot null, "mock-adapter", false, "wopr"
     @robot.adapter.on "connected", ->
